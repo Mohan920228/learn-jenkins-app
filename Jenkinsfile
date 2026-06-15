@@ -51,14 +51,14 @@ pipeline {
                         sh "ls"
                 }
             }
-            stage{
-                agent{
-                    docker{
+                stage("Paralleltest2"){
+                    agent{
+                        docker{
                           image "memcached:trixie"
                     }
                 }
-                steps{
-                    sh "ls"
+                    steps{
+                        sh "ls"
                 }
             }
         }
