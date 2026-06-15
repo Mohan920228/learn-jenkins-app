@@ -1,9 +1,12 @@
 pipeline{
   agent any{
     stages{
-      stage("Build"){
+      stage("Checkout"){
         steps{
-          echo "Hello Build"
+          echo "Checking out SCM"
+          git url: "https://github.com/Mohan920228/learn-jenkins-app.git"
+          branch: "main"
+          credentialsId:"git hub login"
         }
       }
     }
