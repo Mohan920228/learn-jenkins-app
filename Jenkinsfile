@@ -1,28 +1,28 @@
-pipeline {
-    agent any
-
-    stages {
-
-        stage("Build") {
-            agent {
-                docker {
-                    image "node:trixie"
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    ls -la
-                    node --version
-                    npm --version
-
-                    npm ci
-                    npm run build
-                '''
-            }
+pipeline{
+  agent any
+  environment{
+    NETLIFY_SITE_ID= "5215a283-e542-4d4e-b83c-d648a46c1519"
+  }
+  stages{
+    stage("Build"){
+      agent{
+        docker{
+          image "node:trixie"
+          reuseNode true
         }
-
-        stage("Test") {
+      }
+      steps{
+        echo "in the docker container"
+        sh '''
+        ls -la
+        node --version
+        npm --version
+        npm ci
+        npm run build
+        '''
+      }
+    }
+    stage('Test') {
             agent {
                 docker {
                     image "node:trixie"
@@ -36,21 +36,20 @@ pipeline {
                 '''
             }
         }
-
-        stage("Deploy") {
-            agent {
+    stage("deploy"){
+      agent {
                 docker {
                     image "node:trixie"
                     reuseNode true
                 }
             }
-            steps {
-                sh '''
-                    npm install netlify-cli
-
-                    ./node_modules/.bin/netlify --version
-                '''
-            }
-        }
     }
+    steps{
+      sh '''
+      npm install netlify-cli
+      node_module/.bin/netlify --version
+      node_module/.bin/netlify status
+      '''
+    }
+  }
 }
