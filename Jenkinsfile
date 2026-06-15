@@ -39,23 +39,23 @@ pipeline {
                 '''
             }
         }
-        stage("Parallel test"){
-        parallel {
-            stage("docker cont runner"){
-                agent{
-                    docker{image "httpd:trixie"}
-                    
+        stage("Paralleltest"){
+            parallel {
+                stage("docker cont runner"){
+                    agent{
+                        docker{
+                            image "httpd:trixie"
+                        }
                 }
-                steps{
-                    sh "ls"
+                    steps{
+                        sh "ls"
                 }
             }
             stage{
                 agent{
                     docker{
-                          image "memcached:trixie"  
+                          image "memcached:trixie"
                     }
-                    
                 }
                 steps{
                     sh "ls"
