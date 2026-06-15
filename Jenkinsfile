@@ -2,6 +2,14 @@ pipeline {
     agent any
 
     stages {
+        /*This is for build stage
+        This is for build stage
+        This is for build stage
+        This is for build stage
+        This is for build stage
+        This is for build stage
+        */
+        
         stage('Build') {
             agent {
                 docker {
@@ -37,6 +45,26 @@ pipeline {
                     test -f build/index.html
                     npm test
                 '''
+            }
+        }
+    }
+    stage("Parallel test"){
+        parallel {
+            stage("docker cont runner"){
+                agent{
+                    image "httpd:trixie"
+                }
+                steps{
+                    sh "ls"
+                }
+            }
+            stage{
+                agent{
+                    image "memcached:trixie"
+                }
+                steps{
+                    sh "ls"
+                }
             }
         }
     }
