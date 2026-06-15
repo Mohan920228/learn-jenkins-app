@@ -29,8 +29,8 @@ pipeline{
             }
             steps{
                 sh '''
-                test -f build/index.html
-                node test
+                find . -path "*/build/index.html"
+                npm test -- --watchAll=false
                 '''
             }
         }
