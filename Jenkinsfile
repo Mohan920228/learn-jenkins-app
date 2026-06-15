@@ -1,36 +1,41 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Build"){
-            agent{
-                docker{
-                    image "node:18-alpine"
+
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps{
+            steps {
                 sh '''
                     ls -la
                     node --version
                     npm --version
-                    npm ci  
+
+                    npm ci
                     npm run build
-                    find . -name "ibuild/index.html
-                    npm test
+
+                    find . -path "*/build/index.html"
+
+                    CI=true npm test
                 '''
             }
         }
-        stage("Test"){
-            agent{
-                docker{
-                    image "node:18-alpine"
+
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps{
+            steps {
                 sh '''
-                find . -path "*/build/index.html"
-                npm test -- --watchAll=false
+                    test -f build/index.html
+                    echo "Build artifact found: build/index.html"
                 '''
             }
         }
